@@ -1,14 +1,15 @@
-name: 'NX Migration Bot'
+name: 'NX Migration Action'
 description: 'This Action checks your current NX version, migrates the project in a new branch and opens a PR.'
 author: 'Timon Masberg'
+
 inputs:
   repoToken:
     required: true
-    description: Repository secret
-  prTitle:
+    description: 'Repository secret'
+  base:
     required: false
-    description: 'Title of the PR where $VERSION is the new version of NX.'
-    default: 'Migrate NX to $VERSION'
+    description: 'The name of the branch you want the changes pulled into.'
+    default: 'main'
   commitMessage:
     required: false
     description: 'Commit Message where $VERSION is the new version of NX.'
@@ -17,10 +18,13 @@ inputs:
     required: false
     description: 'If false, the migrations.json file will be deleted after running the migrations. It is considered best-practice to check-in the migrations.json.'
     default: 'true'
+  prTitle:
+    required: false
+    description: 'Title of the PR where $VERSION is the new version of NX.'
+    default: 'Migrate NX to $VERSION'
 outputs:
   prId:
     description: 'Issue ID of the created PR'
-
 
 runs:
   using: 'node16'
