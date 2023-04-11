@@ -47,7 +47,7 @@ async function run(): Promise<void> {
     const {data: newPr} = await octokit.rest.pulls.create({
       ...github.context.repo,
       title: inputs.prTitle.replace('$VERSION', latestNxVersion),
-      body: makePRBody(latestNxGHRelease.body_html || 'No release notes', latestNxGHRelease.created_at, latestNxGHRelease.html_url),
+      body: makePRBody(latestNxGHRelease.body || 'No release notes', latestNxGHRelease.created_at, latestNxGHRelease.html_url),
       head: repoName,
       base: 'main'
     })

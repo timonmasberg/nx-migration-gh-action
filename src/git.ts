@@ -5,6 +5,7 @@ export async function pushChangesToRemote(commitMessage: string, repoName: strin
   await exec(`git config --local user.name "github-actions[bot]"`)
   await exec(`git remote set-url origin ${origin}`)
 
+  await exec(`git checkout -b ${repoName}`)
   await exec('git add .')
   await exec(
     `git commit -m "${commitMessage}"`
