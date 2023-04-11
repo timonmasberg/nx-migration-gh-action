@@ -1,0 +1,14 @@
+{
+  "name": "action-test-project",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {},
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "nx": "15.8.0"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}
