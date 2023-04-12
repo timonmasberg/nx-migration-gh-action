@@ -25,6 +25,18 @@ async function run(): Promise<void> {
 
     core.info(`New NX version detected (${latestNxVersion}). Attempting to migrate...`)
 
+    core.debug('Checking if a PR for this version already exists...')
+
+    const prTitle = inputs.prTitle.replace('$VERSION', latestNxVersion);
+    const response = await octokit.rest.search.issuesAndPullRequests({
+      q: `repo:${github.context.repo.owner}/${github.context.repo.repo} is:pr title:"${prTitle}"`,
+    });
+
+    if (response.data.total_count > 0) {
+      core.info(`A PR for this version already exists: ${response.data.items[0].html_url}`);
+      return
+    }
+
     core.debug('Fetching latest release for NX for safety\'s sake...')
     const {data: latestNxGHRelease} = await octokit.rest.repos.getLatestRelease({
       owner: 'nrwl',
