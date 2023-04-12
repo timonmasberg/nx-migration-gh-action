@@ -14,7 +14,6 @@ on:
 jobs:
   check-dist:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
 
@@ -33,9 +32,9 @@ jobs:
 
       - name: Compare the expected and actual dist/ directories
         run: |
-          if [ "$(git diff --ignore-space-at-eol dist/ | wc -l)" -gt "0" ]; then
+          if [ "$(git diff --ignore-cr-at-eol --ignore-space-at-eol dist/ | wc -l)" -gt "0" ]; then
             echo "Detected uncommitted changes after build. See status below:"
-            git diff --no-prefix -U1000
+            git diff --text
             exit 1
           fi
         id: diff
