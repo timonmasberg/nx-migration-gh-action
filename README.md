@@ -36,6 +36,11 @@ jobs:
 
 You can also use this action in other workflow events.
 
+Make sure you have set the necessary workflow permissions:
+- Read and write permissions
+- Allow GitHub Actions to create and approve Pull Requests
+
+
 ## Contribute
 
 As I have done this mostly just to fit our needs over at [Kordis](https://github.com/kordis-leitstelle/kordis) and [Cartesius.io](https://cartesius.io), this might lack some features or does not cover some edge cases.
