@@ -21278,13 +21278,15 @@ const core = __importStar(__nccwpck_require__(2186));
 function getInputs() {
     const repoToken = core.getInput('repoToken', { required: true });
     const commitMessage = core.getInput('commitMessage', { required: false });
-    const includeMigrationsFile = core.getInput('includeMigrationsFile', { required: false });
+    const includeMigrationsFile = core.getInput('includeMigrationsFile', {
+        required: false
+    });
     const prTitle = core.getInput('prTitle', { required: false });
     return {
         repoToken,
         commitMessage,
         includeMigrationsFile: Boolean(includeMigrationsFile),
-        prTitle,
+        prTitle
     };
 }
 exports.getInputs = getInputs;
@@ -21353,12 +21355,14 @@ function run() {
             core.info(`New NX version detected (${latestNxVersion}). Attempting to migrate...`);
             const branchName = `migrate-nx-to-${latestNxVersion}`;
             core.debug('Checking if a branch for this version already exists...');
-            const { data: existingBranch } = yield octokit.rest.repos.getBranch(Object.assign(Object.assign({}, github.context.repo), { branch: branchName })).catch(() => ({ data: null }));
+            const { data: existingBranch } = yield octokit.rest.repos
+                .getBranch(Object.assign(Object.assign({}, github.context.repo), { branch: branchName }))
+                .catch(() => ({ data: null }));
             if (existingBranch) {
                 core.info(`A branch (${branchName}) for this version already exists, skipping migration.`);
                 return;
             }
-            core.debug('Fetching latest release for NX for safety\'s sake...');
+            core.debug("Fetching latest release for NX for safety's sake...");
             const { data: latestNxGHRelease } = yield octokit.rest.repos.getLatestRelease({
                 owner: 'nrwl',
                 repo: 'nx'
@@ -21409,14 +21413,14 @@ const fs_1 = __importDefault(__nccwpck_require__(7147));
 function migrate(keepMigrationsFile) {
     return __awaiter(this, void 0, void 0, function* () {
         yield (0, exec_1.exec)('npx nx migrate latest', [], {
-            env: Object.assign(Object.assign({}, process.env), { 'npm_config_yes': 'true' })
+            env: Object.assign(Object.assign({}, process.env), { npm_config_yes: 'true' })
         });
         yield (0, exec_1.exec)('npm i');
         yield (0, exec_1.exec)('npx nx migrate --run-migrations=migrations.json', [], {
-            env: Object.assign(Object.assign({}, process.env), { 'npm_config_yes': 'true' })
+            env: Object.assign(Object.assign({}, process.env), { npm_config_yes: 'true' })
         });
         if (!keepMigrationsFile) {
-            fs_1.default.unlinkSync("./migrations.json");
+            fs_1.default.unlinkSync('./migrations.json');
         }
     });
 }
@@ -21430,28 +21434,14 @@ exports.migrate = migrate;
 
 "use strict";
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
 };
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
@@ -21459,20 +21449,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getLatestNxVersion = exports.getCurrentNxVersion = void 0;
 const fs_1 = __importDefault(__nccwpck_require__(7147));
-const core = __importStar(__nccwpck_require__(2186));
 const latest_version_1 = __importDefault(__nccwpck_require__(7728));
 function getCurrentNxVersion() {
     const packageJson = fs_1.default.readFileSync('./package.json', 'utf8');
     const packageObject = JSON.parse(packageJson);
     if (!('nx' in packageObject.devDependencies)) {
-        core.setFailed('NX package can not be detected as dev dependency. Make sure you provided the correct package.json file and NX is installed.');
-        return;
+        throw new Error('NX package can not be detected as dev dependency. Make sure you provided the correct package.json file and NX is installed.');
     }
     return packageObject.devDependencies['nx'].replace(/[\^~]/, '');
 }
 exports.getCurrentNxVersion = getCurrentNxVersion;
 function getLatestNxVersion() {
-    return (0, latest_version_1.default)('nx');
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield (0, latest_version_1.default)('nx');
+    });
 }
 exports.getLatestNxVersion = getLatestNxVersion;
 
