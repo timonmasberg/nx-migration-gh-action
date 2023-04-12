@@ -31,6 +31,7 @@ async function run(): Promise<void> {
     const response = await octokit.rest.search.issuesAndPullRequests({
       q: `repo:${github.context.repo.owner}/${github.context.repo.repo} is:pr title:"${prTitle}"`,
     });
+    core.info(JSON.stringify(response.data));
 
     if (response.data.total_count > 0) {
       core.info(`A PR for this version already exists: ${response.data.items[0].html_url}`);
@@ -42,7 +43,6 @@ async function run(): Promise<void> {
       owner: 'nrwl',
       repo: 'nx'
     })
-    core.info(JSON.stringify(latestNxGHRelease))
 
     core.debug('Starting migrations...')
     await migrate()
