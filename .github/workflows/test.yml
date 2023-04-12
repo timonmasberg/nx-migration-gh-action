@@ -1,5 +1,6 @@
 name: 'build-test'
-on: # rebuild any PRs and main branch changes
+concurrency: 'build-test'
+on:
   pull_request:
   push:
     branches:
