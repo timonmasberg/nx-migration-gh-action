@@ -21353,7 +21353,7 @@ function run() {
             core.info(`New NX version detected (${latestNxVersion}). Attempting to migrate...`);
             const branchName = `migrate-nx-to-${latestNxVersion}`;
             core.debug('Checking if a branch for this version already exists...');
-            const { data: existingBranch } = yield octokit.rest.repos.getBranch(Object.assign(Object.assign({}, github.context.repo), { branch: branchName }));
+            const { data: existingBranch } = yield octokit.rest.repos.getBranch(Object.assign(Object.assign({}, github.context.repo), { branch: branchName })).catch(() => ({ data: null }));
             if (existingBranch) {
                 core.info(`A branch (${branchName}) for this version already exists, skipping migration.`);
                 return;

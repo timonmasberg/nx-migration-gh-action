@@ -31,7 +31,7 @@ async function run(): Promise<void> {
     const {data: existingBranch} = await octokit.rest.repos.getBranch({
       ...github.context.repo,
       branch: branchName
-    })
+    }).catch(() => ({data: null}))
 
     if (existingBranch) {
       core.info(`A branch (${branchName}) for this version already exists, skipping migration.`);
