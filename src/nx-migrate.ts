@@ -1,6 +1,7 @@
 import {exec} from '@actions/exec'
+import fs from 'fs'
 
-export async function migrate() {
+export async function migrate(keepMigrationsFile: boolean) {
   await exec('npx nx migrate latest', [], {
     env: {
       ...process.env,
@@ -14,4 +15,8 @@ export async function migrate() {
       'npm_config_yes': 'true'
     }
   })
+
+  if (!keepMigrationsFile) {
+    fs.unlinkSync("./migrations.json");
+  }
 }

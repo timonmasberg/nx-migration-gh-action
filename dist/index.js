@@ -21351,14 +21351,13 @@ function run() {
                 return;
             }
             core.info(`New NX version detected (${latestNxVersion}). Attempting to migrate...`);
-            core.debug('Checking if a PR for this version already exists...');
             const prTitle = inputs.prTitle.replace('$VERSION', latestNxVersion);
+            core.debug('Checking if a PR for this version already exists...');
             const response = yield octokit.rest.search.issuesAndPullRequests({
                 q: `repo:${github.context.repo.owner}/${github.context.repo.repo} ${prTitle} in:title is:pr`,
                 sort: 'created',
                 per_page: 1,
             });
-            core.info(JSON.stringify(response.data));
             if (response.data.total_count > 0) {
                 core.info(`A PR for this version already exists: ${response.data.items[0].html_url}`);
                 return;
@@ -21369,7 +21368,7 @@ function run() {
                 repo: 'nx'
             });
             core.debug('Starting migrations...');
-            yield (0, nx_migrate_1.migrate)();
+            yield (0, nx_migrate_1.migrate)(inputs.includeMigrationsFile);
             core.debug('Pushing changes...');
             const repoName = `migrate-nx-to-${latestNxVersion}`;
             const commitMessage = inputs.commitMessage.replace('$VERSION', latestNxVersion);
@@ -21405,10 +21404,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.migrate = void 0;
 const exec_1 = __nccwpck_require__(1514);
-function migrate() {
+const fs_1 = __importDefault(__nccwpck_require__(7147));
+function migrate(keepMigrationsFile) {
     return __awaiter(this, void 0, void 0, function* () {
         yield (0, exec_1.exec)('npx nx migrate latest', [], {
             env: Object.assign(Object.assign({}, process.env), { 'npm_config_yes': 'true' })
@@ -21417,6 +21420,9 @@ function migrate() {
         yield (0, exec_1.exec)('npx nx migrate --run-migrations=migrations.json', [], {
             env: Object.assign(Object.assign({}, process.env), { 'npm_config_yes': 'true' })
         });
+        if (!keepMigrationsFile) {
+            fs_1.default.unlinkSync("./migrations.json");
+        }
     });
 }
 exports.migrate = migrate;
