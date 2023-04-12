@@ -24,7 +24,7 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-    - uses: @timonmasberg/nx-migration-action@v1
+    - uses: timonmasberg/nx-migration-gh-action@v1.0.0
       with:
         repoToken: ${{ secrets.GITHUB_TOKEN }}
         # Optional:
@@ -38,7 +38,7 @@ You can also use this action in other workflow events.
 
 ## Contribute
 
-As I have done this mostly just to fit our use-case over at [Kordis](https://github.com/kordis-leitstelle/kordis) and [Cartesius.io](https://cartesius.io), so this might lack some features or does not cover some edge cases.
+As I have done this mostly just to fit our needs over at [Kordis](https://github.com/kordis-leitstelle/kordis) and [Cartesius.io](https://cartesius.io), this might lack some features or does not cover some edge cases.
 Also tests are currently rare ;)  
 I highly appreciate any contribution. 
 
