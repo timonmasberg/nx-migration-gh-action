@@ -21354,7 +21354,9 @@ function run() {
             core.debug('Checking if a PR for this version already exists...');
             const prTitle = inputs.prTitle.replace('$VERSION', latestNxVersion);
             const response = yield octokit.rest.search.issuesAndPullRequests({
-                q: `repo:${github.context.repo.owner}/${github.context.repo.repo} is:pr title:"${prTitle}"`,
+                q: `repo:${github.context.repo.owner}/${github.context.repo.repo} ${prTitle} in:title is:pr`,
+                sort: 'created',
+                per_page: 1,
             });
             core.info(JSON.stringify(response.data));
             if (response.data.total_count > 0) {

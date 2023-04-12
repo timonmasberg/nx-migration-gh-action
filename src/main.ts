@@ -29,7 +29,9 @@ async function run(): Promise<void> {
 
     const prTitle = inputs.prTitle.replace('$VERSION', latestNxVersion);
     const response = await octokit.rest.search.issuesAndPullRequests({
-      q: `repo:${github.context.repo.owner}/${github.context.repo.repo} is:pr title:"${prTitle}"`,
+      q: `repo:${github.context.repo.owner}/${github.context.repo.repo} ${prTitle} in:title is:pr`,
+      sort: 'created',
+      per_page: 1,
     });
     core.info(JSON.stringify(response.data));
 
