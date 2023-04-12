@@ -24,17 +24,17 @@ async function run(): Promise<void> {
     }
 
     core.info(`New NX version detected (${latestNxVersion}). Attempting to migrate...`)
+    const branchName = `migrate-nx-to-${latestNxVersion}`
 
-    const prTitle = inputs.prTitle.replace('$VERSION', latestNxVersion);
+    core.debug('Checking if a branch for this version already exists...')
 
-    core.debug('Checking if a PR for this version already exists...')
-    const response = await octokit.rest.search.issuesAndPullRequests({
-      q: `repo:${github.context.repo.owner}/${github.context.repo.repo} ${prTitle} in:title is:pr`,
-      sort: 'created',
-      per_page: 1,
-    });
-    if (response.data.total_count > 0) {
-      core.info(`A PR for this version already exists: ${response.data.items[0].html_url}`);
+    const {data: existingBranch} = await octokit.rest.repos.getBranch({
+      ...github.context.repo,
+      branch: branchName
+    })
+
+    if (existingBranch) {
+      core.info(`A branch (${branchName}) for this version already exists, skipping migration.`);
       return
     }
 
@@ -48,11 +48,10 @@ async function run(): Promise<void> {
     await migrate(inputs.includeMigrationsFile)
 
     core.debug('Pushing changes...')
-    const repoName = `migrate-nx-to-${latestNxVersion}`
     const commitMessage = inputs.commitMessage.replace('$VERSION', latestNxVersion)
     const origin = `https://x-access-token:${inputs.repoToken}@github.com/${github.context.repo.owner}/${github.context.repo.repo}`
-    await pushChangesToRemote(commitMessage, repoName, origin)
-    core.info(`Pushed changes to origin/${repoName}`)
+    await pushChangesToRemote(commitMessage, branchName, origin)
+    core.info(`Pushed changes to origin/${branchName}`)
 
     core.debug('Creating Pull Request...')
 
@@ -60,7 +59,7 @@ async function run(): Promise<void> {
       ...github.context.repo,
       title: inputs.prTitle.replace('$VERSION', latestNxVersion),
       body: makePRBody(latestNxGHRelease.body || 'No release notes', latestNxGHRelease.created_at, latestNxGHRelease.html_url),
-      head: repoName,
+      head: branchName,
       base: 'main'
     })
 

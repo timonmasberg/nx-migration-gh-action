@@ -28,6 +28,13 @@ jobs:
           npm i
           ls -a
       - uses: ./
+        id: nx_migrate
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           includeMigrationsFile: false
+      - run: 'echo "PR ID Output: ${{ steps.nx_migrate.outputs.prId }}"'
+      - name: Cleanup
+        if: steps.nx_migrate.outputs.prId
+        run: gh pr close --delete-branch "${{ steps.nx_migrate.outputs.prId }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

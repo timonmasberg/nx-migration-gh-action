@@ -21351,15 +21351,11 @@ function run() {
                 return;
             }
             core.info(`New NX version detected (${latestNxVersion}). Attempting to migrate...`);
-            const prTitle = inputs.prTitle.replace('$VERSION', latestNxVersion);
-            core.debug('Checking if a PR for this version already exists...');
-            const response = yield octokit.rest.search.issuesAndPullRequests({
-                q: `repo:${github.context.repo.owner}/${github.context.repo.repo} ${prTitle} in:title is:pr`,
-                sort: 'created',
-                per_page: 1,
-            });
-            if (response.data.total_count > 0) {
-                core.info(`A PR for this version already exists: ${response.data.items[0].html_url}`);
+            const branchName = `migrate-nx-to-${latestNxVersion}`;
+            core.debug('Checking if a branch for this version already exists...');
+            const { data: existingBranch } = yield octokit.rest.repos.getBranch(Object.assign(Object.assign({}, github.context.repo), { branch: branchName }));
+            if (existingBranch) {
+                core.info(`A branch (${branchName}) for this version already exists, skipping migration.`);
                 return;
             }
             core.debug('Fetching latest release for NX for safety\'s sake...');
@@ -21370,13 +21366,12 @@ function run() {
             core.debug('Starting migrations...');
             yield (0, nx_migrate_1.migrate)(inputs.includeMigrationsFile);
             core.debug('Pushing changes...');
-            const repoName = `migrate-nx-to-${latestNxVersion}`;
             const commitMessage = inputs.commitMessage.replace('$VERSION', latestNxVersion);
             const origin = `https://x-access-token:${inputs.repoToken}@github.com/${github.context.repo.owner}/${github.context.repo.repo}`;
-            yield (0, git_1.pushChangesToRemote)(commitMessage, repoName, origin);
-            core.info(`Pushed changes to origin/${repoName}`);
+            yield (0, git_1.pushChangesToRemote)(commitMessage, branchName, origin);
+            core.info(`Pushed changes to origin/${branchName}`);
             core.debug('Creating Pull Request...');
-            const { data: newPr } = yield octokit.rest.pulls.create(Object.assign(Object.assign({}, github.context.repo), { title: inputs.prTitle.replace('$VERSION', latestNxVersion), body: (0, git_1.makePRBody)(latestNxGHRelease.body || 'No release notes', latestNxGHRelease.created_at, latestNxGHRelease.html_url), head: repoName, base: 'main' }));
+            const { data: newPr } = yield octokit.rest.pulls.create(Object.assign(Object.assign({}, github.context.repo), { title: inputs.prTitle.replace('$VERSION', latestNxVersion), body: (0, git_1.makePRBody)(latestNxGHRelease.body || 'No release notes', latestNxGHRelease.created_at, latestNxGHRelease.html_url), head: branchName, base: 'main' }));
             core.info(`Pull Request created: ${newPr.issue_url}`);
             core.setOutput('prId', newPr.number);
         }
