@@ -21281,11 +21281,15 @@ function getInputs() {
     const includeMigrationsFile = core.getInput('includeMigrationsFile', {
         required: false
     });
+    const legacyPeerDeps = core.getInput('legacyPeerDeps', {
+        required: false
+    });
     const prTitle = core.getInput('prTitle', { required: false });
     return {
         repoToken,
         commitMessage,
         includeMigrationsFile: Boolean(includeMigrationsFile),
+        legacyPeerDeps: Boolean(legacyPeerDeps),
         prTitle
     };
 }
@@ -21368,7 +21372,7 @@ function run() {
                 repo: 'nx'
             });
             core.debug('Starting migrations...');
-            yield (0, nx_migrate_1.migrate)(inputs.includeMigrationsFile);
+            yield (0, nx_migrate_1.migrate)(inputs.includeMigrationsFile, inputs.legacyPeerDeps);
             core.debug('Pushing changes...');
             const commitMessage = inputs.commitMessage.replace('$VERSION', latestNxVersion);
             const origin = `https://x-access-token:${inputs.repoToken}@github.com/${github.context.repo.owner}/${github.context.repo.repo}`;
@@ -21410,14 +21414,16 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.migrate = void 0;
 const exec_1 = __nccwpck_require__(1514);
 const fs_1 = __importDefault(__nccwpck_require__(7147));
-function migrate(keepMigrationsFile) {
+function migrate(keepMigrationsFile, legacyPeerDeps) {
     return __awaiter(this, void 0, void 0, function* () {
         yield (0, exec_1.exec)('npx nx migrate latest', [], {
             env: Object.assign(Object.assign({}, process.env), { npm_config_yes: 'true' })
         });
-        yield (0, exec_1.exec)('npm i');
-        yield (0, exec_1.exec)('npx nx migrate --run-migrations=migrations.json', [], {
-            env: Object.assign(Object.assign({}, process.env), { npm_config_yes: 'true' })
+        yield (0, exec_1.exec)('npm i', [], {
+            env: Object.assign(Object.assign({}, process.env), { npm_config_legacy_peer_deps: String(legacyPeerDeps) })
+        });
+        yield (0, exec_1.exec)('npx nx migrate --run-migrations=migrations.json --create-commits', [], {
+            env: Object.assign(Object.assign({}, process.env), { npm_config_yes: 'true', npm_config_legacy_peer_deps: String(legacyPeerDeps) })
         });
         if (!keepMigrationsFile) {
             fs_1.default.unlinkSync('./migrations.json');
