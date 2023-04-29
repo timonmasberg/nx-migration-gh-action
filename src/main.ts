@@ -52,7 +52,7 @@ async function run(): Promise<void> {
     )
 
     core.debug('Starting migrations...')
-    await migrate(inputs.includeMigrationsFile)
+    await migrate(inputs.includeMigrationsFile, inputs.legacyPeerDeps)
 
     core.debug('Pushing changes...')
     const commitMessage = inputs.commitMessage.replace(

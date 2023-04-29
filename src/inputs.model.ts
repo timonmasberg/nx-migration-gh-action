@@ -3,4 +3,5 @@ export default interface Inputs {
   commitMessage: string
   prTitle: string
   includeMigrationsFile: boolean
+  legacyPeerDeps: boolean
 }

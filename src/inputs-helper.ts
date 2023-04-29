@@ -7,12 +7,16 @@ export function getInputs(): Inputs {
   const includeMigrationsFile = core.getInput('includeMigrationsFile', {
     required: false
   })
+  const legacyPeerDeps = core.getInput('legacyPeerDeps', {
+    required: false
+  })
   const prTitle = core.getInput('prTitle', {required: false})
 
   return {
     repoToken,
     commitMessage,
     includeMigrationsFile: Boolean(includeMigrationsFile),
+    legacyPeerDeps: Boolean(legacyPeerDeps),
     prTitle
   }
 }
