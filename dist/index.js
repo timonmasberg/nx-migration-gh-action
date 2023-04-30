@@ -21210,17 +21210,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.makePRBody = exports.pushChangesToRemote = void 0;
+exports.makePRBody = exports.pushChangesToRemote = exports.prepareGit = void 0;
 const exec_1 = __nccwpck_require__(1514);
-function pushChangesToRemote(commitMessage, repoName, origin) {
+function prepareGit(origin, branchName) {
     return __awaiter(this, void 0, void 0, function* () {
+        yield (0, exec_1.exec)(`git checkout -b ${branchName}`);
         yield (0, exec_1.exec)(`git config --local user.email "github-actions[bot]@users.noreply.github.com"`);
         yield (0, exec_1.exec)(`git config --local user.name "github-actions[bot]"`);
         yield (0, exec_1.exec)(`git remote set-url origin ${origin}`);
-        yield (0, exec_1.exec)(`git checkout -b ${repoName}`);
-        yield (0, exec_1.exec)('git add .');
-        yield (0, exec_1.exec)(`git commit -m "${commitMessage}"`);
-        yield (0, exec_1.exec)(`git push --force-with-lease -u origin ${repoName}`);
+    });
+}
+exports.prepareGit = prepareGit;
+function pushChangesToRemote(branchName) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield (0, exec_1.exec)(`git push --force-with-lease -u origin ${branchName}`);
     });
 }
 exports.pushChangesToRemote = pushChangesToRemote;
@@ -21277,7 +21280,6 @@ exports.getInputs = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 function getInputs() {
     const repoToken = core.getInput('repoToken', { required: true });
-    const commitMessage = core.getInput('commitMessage', { required: false });
     const includeMigrationsFile = core.getInput('includeMigrationsFile', {
         required: false
     });
@@ -21287,7 +21289,6 @@ function getInputs() {
     const prTitle = core.getInput('prTitle', { required: false });
     return {
         repoToken,
-        commitMessage,
         includeMigrationsFile: Boolean(includeMigrationsFile),
         legacyPeerDeps: Boolean(legacyPeerDeps),
         prTitle
@@ -21371,12 +21372,13 @@ function run() {
                 owner: 'nrwl',
                 repo: 'nx'
             });
+            core.debug('Setting up git user, origin and branch...');
+            const origin = `https://x-access-token:${inputs.repoToken}@github.com/${github.context.repo.owner}/${github.context.repo.repo}`;
+            yield (0, git_1.prepareGit)(origin, branchName);
             core.debug('Starting migrations...');
             yield (0, nx_migrate_1.migrate)(inputs.includeMigrationsFile, inputs.legacyPeerDeps);
             core.debug('Pushing changes...');
-            const commitMessage = inputs.commitMessage.replace('$VERSION', latestNxVersion);
-            const origin = `https://x-access-token:${inputs.repoToken}@github.com/${github.context.repo.owner}/${github.context.repo.repo}`;
-            yield (0, git_1.pushChangesToRemote)(commitMessage, branchName, origin);
+            yield (0, git_1.pushChangesToRemote)(branchName);
             core.info(`Pushed changes to origin/${branchName}`);
             core.debug('Creating Pull Request...');
             const { data: newPr } = yield octokit.rest.pulls.create(Object.assign(Object.assign({}, github.context.repo), { title: inputs.prTitle.replace('$VERSION', latestNxVersion), body: (0, git_1.makePRBody)(latestNxGHRelease.body || 'No release notes', latestNxGHRelease.created_at, latestNxGHRelease.html_url), head: branchName, base: 'main' }));
