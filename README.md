@@ -6,7 +6,7 @@ If a new version exists, it automatically runs `nx migrate latest`, installs all
 ## Usage
 
 The easiest way is to check for new versions with a scheduled workflow. 
-Make sure to checkout the branch you want apply the migrations in case there is a new version of NX.
+Make sure to checkout the branch you want apply the migrations in case there is a new version of NX. The Action will create commits for the applied migrations.
 
 For a detailed description of all parameters check the [action.yml](action.yml).
 
@@ -29,7 +29,6 @@ jobs:
       with:
         repoToken: ${{ secrets.GITHUB_TOKEN }}
         # Optional:
-        commitMessage: 'deps: migrate nx to $VERSION'
         prTitle: 'Migrates NX to $VERSION'
         includeMigrationsFile: false # `migrations.json` will not be included in this PR.
         base: 'dev'

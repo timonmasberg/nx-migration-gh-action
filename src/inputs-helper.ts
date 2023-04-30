@@ -3,7 +3,6 @@ import Inputs from './inputs.model'
 
 export function getInputs(): Inputs {
   const repoToken = core.getInput('repoToken', {required: true})
-  const commitMessage = core.getInput('commitMessage', {required: false})
   const includeMigrationsFile = core.getInput('includeMigrationsFile', {
     required: false
   })
@@ -14,7 +13,6 @@ export function getInputs(): Inputs {
 
   return {
     repoToken,
-    commitMessage,
     includeMigrationsFile: Boolean(includeMigrationsFile),
     legacyPeerDeps: Boolean(legacyPeerDeps),
     prTitle

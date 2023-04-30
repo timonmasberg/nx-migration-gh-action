@@ -10,10 +10,6 @@ inputs:
     required: false
     description: 'The name of the branch you want the changes pulled into.'
     default: 'main'
-  commitMessage:
-    required: false
-    description: 'Commit Message where $VERSION is the new version of NX.'
-    default: 'migrates NX to $VERSION'
   includeMigrationsFile:
     required: false
     description: 'If false, the migrations.json file will be deleted after running the migrations. It is considered best-practice to check-in the migrations.json.'
