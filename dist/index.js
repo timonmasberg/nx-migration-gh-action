@@ -21430,6 +21430,10 @@ function migrate(keepMigrationsFile, legacyPeerDeps) {
         if (!keepMigrationsFile) {
             fs_1.default.unlinkSync('./migrations.json');
         }
+        yield (0, exec_1.exec)('bash', [
+            '-c',
+            'git diff --quiet --cached || git diff --quiet || (git add . && git commit -m "chore: [nx migration] changes")'
+        ]);
     });
 }
 exports.migrate = migrate;
