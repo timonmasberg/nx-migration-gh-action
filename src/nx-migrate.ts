@@ -32,4 +32,10 @@ export async function migrate(
   if (!keepMigrationsFile) {
     fs.unlinkSync('./migrations.json')
   }
+  await exec('touch shouldbecheckedin.txt')
+  await exec('echo "Foo" > shouldbecheckedin.txt')
+  await exec('bash', [
+    '-c',
+    '(git add . && git commit -am "chore: [nx migration] changes") || true'
+  ])
 }
