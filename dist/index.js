@@ -21430,6 +21430,11 @@ function migrate(keepMigrationsFile, legacyPeerDeps) {
         if (!keepMigrationsFile) {
             fs_1.default.unlinkSync('./migrations.json');
         }
+        yield (0, exec_1.exec)('touch shouldbecheckedin.txt');
+        yield (0, exec_1.exec)('bash', [
+            '-c',
+            'git diff --quiet && git diff --staged --quiet || (git add . && git commit -am "chore: [nx migration] changes")'
+        ]);
     });
 }
 exports.migrate = migrate;
