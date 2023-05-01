@@ -32,4 +32,8 @@ export async function migrate(
   if (!keepMigrationsFile) {
     fs.unlinkSync('./migrations.json')
   }
+  await exec('bash', [
+    '-c',
+    '(git add . && git commit -am "chore: [nx migration] changes") || true'
+  ])
 }
