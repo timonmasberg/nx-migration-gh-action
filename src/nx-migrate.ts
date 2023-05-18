@@ -28,10 +28,18 @@ export async function migrate(
       }
     }
   )
+  // sometimes migrations change packages without installing them, so naivly install dependencies here again
+  await exec('npm i', [], {
+    env: {
+      ...process.env,
+      npm_config_legacy_peer_deps: String(legacyPeerDeps)
+    }
+  })
 
   if (!keepMigrationsFile) {
     fs.unlinkSync('./migrations.json')
   }
+
   await exec('bash', [
     '-c',
     '(git add . && git commit -am "chore: [nx migration] changes") || true'

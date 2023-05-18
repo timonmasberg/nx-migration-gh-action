@@ -21427,6 +21427,10 @@ function migrate(keepMigrationsFile, legacyPeerDeps) {
         yield (0, exec_1.exec)('npx nx migrate --run-migrations=migrations.json --create-commits', [], {
             env: Object.assign(Object.assign({}, process.env), { npm_config_yes: 'true', npm_config_legacy_peer_deps: String(legacyPeerDeps) })
         });
+        // sometimes migrations change packages without installing them, so naivly install dependencies here again
+        yield (0, exec_1.exec)('npm i', [], {
+            env: Object.assign(Object.assign({}, process.env), { npm_config_legacy_peer_deps: String(legacyPeerDeps) })
+        });
         if (!keepMigrationsFile) {
             fs_1.default.unlinkSync('./migrations.json');
         }
