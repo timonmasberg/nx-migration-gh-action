@@ -29,7 +29,7 @@ export async function migrate(
     }
   )
   // sometimes migrations change packages without installing them, so naivly install dependencies here again
-  await exec('npm i', [], {
+  await exec('npm i --package-lock-only', [], {
     env: {
       ...process.env,
       npm_config_legacy_peer_deps: String(legacyPeerDeps)
