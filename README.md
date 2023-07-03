@@ -47,4 +47,4 @@ As I have done this mostly just to fit our needs over at [Kordis](https://github
 Also tests are currently rare ;)  
 I highly appreciate any contribution. 
 
-Make sure to run `npm all` before pushing and to check-in the `dist` folder if you make changes in `src`.
+Make sure to run `npm run all` before pushing and to check-in the `dist` folder if you make changes in `src`.
