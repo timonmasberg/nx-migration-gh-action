@@ -21428,7 +21428,7 @@ function migrate(keepMigrationsFile, legacyPeerDeps) {
             env: Object.assign(Object.assign({}, process.env), { npm_config_yes: 'true', npm_config_legacy_peer_deps: String(legacyPeerDeps) })
         });
         // sometimes migrations change packages without installing them, so naivly install dependencies here again
-        yield (0, exec_1.exec)('npm i --package-lock-only', [], {
+        yield (0, exec_1.exec)('npm i', [], {
             env: Object.assign(Object.assign({}, process.env), { npm_config_legacy_peer_deps: String(legacyPeerDeps) })
         });
         if (!keepMigrationsFile) {
