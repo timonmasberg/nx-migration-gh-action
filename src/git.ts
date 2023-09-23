@@ -16,15 +16,8 @@ export async function pushChangesToRemote(branchName: string): Promise<void> {
   await exec(`git push --force-with-lease -u origin ${branchName}`)
 }
 
-export function makePRBody(
-  releaseNotes: string,
-  publishedAt: string,
-  releaseUrl: string
-): string {
+export function makePRBody(publishedAt: string, releaseUrl: string): string {
   return `This PR migrates the project to the latest stable version of NX.  
-  
-**NX Release Notes:**  
-${releaseNotes}  
 
 **Published:**  
 ${publishedAt}  

@@ -21227,11 +21227,8 @@ function pushChangesToRemote(branchName) {
     });
 }
 exports.pushChangesToRemote = pushChangesToRemote;
-function makePRBody(releaseNotes, publishedAt, releaseUrl) {
+function makePRBody(publishedAt, releaseUrl) {
     return `This PR migrates the project to the latest stable version of NX.  
-  
-**NX Release Notes:**  
-${releaseNotes}  
 
 **Published:**  
 ${publishedAt}  
@@ -21381,7 +21378,7 @@ function run() {
             yield (0, git_1.pushChangesToRemote)(branchName);
             core.info(`Pushed changes to origin/${branchName}`);
             core.debug('Creating Pull Request...');
-            const { data: newPr } = yield octokit.rest.pulls.create(Object.assign(Object.assign({}, github.context.repo), { title: inputs.prTitle.replace('$VERSION', latestNxVersion), body: (0, git_1.makePRBody)(latestNxGHRelease.body || 'No release notes', latestNxGHRelease.created_at, latestNxGHRelease.html_url), head: branchName, base: 'main' }));
+            const { data: newPr } = yield octokit.rest.pulls.create(Object.assign(Object.assign({}, github.context.repo), { title: inputs.prTitle.replace('$VERSION', latestNxVersion), body: (0, git_1.makePRBody)(latestNxGHRelease.created_at, latestNxGHRelease.html_url), head: branchName, base: 'main' }));
             core.info(`Pull Request created: ${newPr.issue_url}`);
             core.setOutput('prId', newPr.number);
         }

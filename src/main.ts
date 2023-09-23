@@ -69,7 +69,6 @@ async function run(): Promise<void> {
       ...github.context.repo,
       title: inputs.prTitle.replace('$VERSION', latestNxVersion),
       body: makePRBody(
-        latestNxGHRelease.body || 'No release notes',
         latestNxGHRelease.created_at,
         latestNxGHRelease.html_url
       ),
