@@ -8,7 +8,7 @@ export async function migrate(
   await exec('npx nx migrate latest', [], {
     env: {
       ...process.env,
-      npm_config_yes: 'true'
+      npm_config_yes: String(true)
     }
   })
   await exec('npm i', [], {
@@ -23,8 +23,8 @@ export async function migrate(
     {
       env: {
         ...process.env,
-        npm_config_yes: 'true',
-        npm_config_legacy_peer_deps: String(legacyPeerDeps)
+        npm_config_yes: String(true),
+        nx_migrate_skip_install: String(true)
       }
     }
   )
