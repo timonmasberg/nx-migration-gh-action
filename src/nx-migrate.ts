@@ -24,7 +24,7 @@ export async function migrate(
       env: {
         ...process.env,
         npm_config_yes: String(true),
-        nx_migrate_skip_install: String(true)
+        NX_MIGRATE_SKIP_INSTALL: String(true)
       }
     }
   )

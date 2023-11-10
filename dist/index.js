@@ -41800,7 +41800,7 @@ function migrate(keepMigrationsFile, legacyPeerDeps) {
             env: Object.assign(Object.assign({}, process.env), { npm_config_legacy_peer_deps: String(legacyPeerDeps) })
         });
         yield (0, exec_1.exec)('npx nx migrate --run-migrations=migrations.json --create-commits', [], {
-            env: Object.assign(Object.assign({}, process.env), { npm_config_yes: String(true), nx_migrate_skip_install: String(true) })
+            env: Object.assign(Object.assign({}, process.env), { npm_config_yes: String(true), NX_MIGRATE_SKIP_INSTALL: String(true) })
         });
         // sometimes migrations change packages without installing them, so naivly install dependencies here again
         yield (0, exec_1.exec)('npm i', [], {
