@@ -73,7 +73,7 @@ async function run(): Promise<void> {
         latestNxGHRelease.html_url
       ),
       head: branchName,
-      base: 'main'
+      base: inputs.base
     })
 
     core.info(`Pull Request created: ${newPr.issue_url}`)

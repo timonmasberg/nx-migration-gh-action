@@ -11,10 +11,13 @@ export function getInputs(): Inputs {
   })
   const prTitle = core.getInput('prTitle', {required: false})
 
+  const base = core.getInput('base', {required: false})
+
   return {
     repoToken,
     includeMigrationsFile: Boolean(includeMigrationsFile),
     legacyPeerDeps: Boolean(legacyPeerDeps),
-    prTitle
+    prTitle,
+    base
   }
 }

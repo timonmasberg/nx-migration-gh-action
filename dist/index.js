@@ -41662,11 +41662,13 @@ function getInputs() {
         required: false
     });
     const prTitle = core.getInput('prTitle', { required: false });
+    const base = core.getInput('base', { required: false });
     return {
         repoToken,
         includeMigrationsFile: Boolean(includeMigrationsFile),
         legacyPeerDeps: Boolean(legacyPeerDeps),
-        prTitle
+        prTitle,
+        base
     };
 }
 exports.getInputs = getInputs;
@@ -41756,7 +41758,7 @@ function run() {
             yield (0, git_1.pushChangesToRemote)(branchName);
             core.info(`Pushed changes to origin/${branchName}`);
             core.debug('Creating Pull Request...');
-            const { data: newPr } = yield octokit.rest.pulls.create(Object.assign(Object.assign({}, github.context.repo), { title: inputs.prTitle.replace('$VERSION', latestNxVersion), body: (0, git_1.makePRBody)(latestNxGHRelease.created_at, latestNxGHRelease.html_url), head: branchName, base: 'main' }));
+            const { data: newPr } = yield octokit.rest.pulls.create(Object.assign(Object.assign({}, github.context.repo), { title: inputs.prTitle.replace('$VERSION', latestNxVersion), body: (0, git_1.makePRBody)(latestNxGHRelease.created_at, latestNxGHRelease.html_url), head: branchName, base: inputs.base }));
             core.info(`Pull Request created: ${newPr.issue_url}`);
             core.setOutput('prId', newPr.number);
         }
