@@ -3,4 +3,5 @@ export default interface Inputs {
   prTitle: string
   includeMigrationsFile: boolean
   legacyPeerDeps: boolean
+  base: string
 }
