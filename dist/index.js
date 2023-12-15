@@ -41795,7 +41795,9 @@ const exec_1 = __nccwpck_require__(1514);
 const fs_1 = __importDefault(__nccwpck_require__(7147));
 function migrate(keepMigrationsFile, legacyPeerDeps) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield (0, exec_1.exec)('npx nx migrate latest', [], {
+        yield (0, exec_1.exec)('npm -v');
+        yield (0, exec_1.exec)('npm ci');
+        yield (0, exec_1.exec)('nx migrate latest', [], {
             env: Object.assign(Object.assign({}, process.env), { npm_config_yes: String(true) })
         });
         yield (0, exec_1.exec)('npm i', [], {
