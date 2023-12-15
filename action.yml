@@ -27,5 +27,5 @@ outputs:
     description: 'Issue ID of the created PR'
 
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
