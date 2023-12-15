@@ -11,13 +11,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: npm ci
       - run: npm run all
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: | # prepare test environment
           cd ..
           mkdir temp
@@ -27,7 +27,6 @@ jobs:
           mv ./temp/action.yml ./nx-migration-gh-action
           cd ./nx-migration-gh-action
           npm i
-          ls -a
       - uses: ./
         id: nx_migrate
         with:
