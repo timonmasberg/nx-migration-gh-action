@@ -5,11 +5,7 @@ export async function migrate(
   keepMigrationsFile: boolean,
   legacyPeerDeps: boolean
 ): Promise<void> {
-  await exec('npm -v')
-
-  await exec('npm ci')
-
-  await exec('nx migrate latest', [], {
+  await exec('npx nx migrate latest', [], {
     env: {
       ...process.env,
       npm_config_yes: String(true)
