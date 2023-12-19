@@ -4,6 +4,7 @@ import {getInputs} from './inputs-helper'
 import {getCurrentNxVersion, getLatestNxVersion} from './nx-version'
 import {makePRBody, prepareGit, pushChangesToRemote} from './git'
 import {migrate} from './nx-migrate'
+import {exec} from '@actions/exec'
 
 async function run(): Promise<void> {
   try {
@@ -54,6 +55,9 @@ async function run(): Promise<void> {
     core.debug('Setting up git user, origin and branch...')
     const origin = `https://x-access-token:${inputs.repoToken}@github.com/${github.context.repo.owner}/${github.context.repo.repo}`
     await prepareGit(origin, branchName)
+
+    core.debug('Installing deps...')
+    await exec('npm ci')
 
     core.debug('Starting migrations...')
     await migrate(inputs.includeMigrationsFile, inputs.legacyPeerDeps)

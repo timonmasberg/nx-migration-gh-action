@@ -41720,6 +41720,7 @@ const inputs_helper_1 = __nccwpck_require__(6188);
 const nx_version_1 = __nccwpck_require__(692);
 const git_1 = __nccwpck_require__(6350);
 const nx_migrate_1 = __nccwpck_require__(8796);
+const exec_1 = __nccwpck_require__(1514);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -41752,6 +41753,8 @@ function run() {
             core.debug('Setting up git user, origin and branch...');
             const origin = `https://x-access-token:${inputs.repoToken}@github.com/${github.context.repo.owner}/${github.context.repo.repo}`;
             yield (0, git_1.prepareGit)(origin, branchName);
+            core.debug('Installing deps...');
+            yield (0, exec_1.exec)('npm ci');
             core.debug('Starting migrations...');
             yield (0, nx_migrate_1.migrate)(inputs.includeMigrationsFile, inputs.legacyPeerDeps);
             core.debug('Pushing changes...');
