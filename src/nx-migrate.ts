@@ -8,7 +8,7 @@ export async function migrate(keepMigrationsFile: boolean): Promise<void> {
       npm_config_yes: String(true)
     }
   })
-  await exec('npm i')
+  await exec('npm install')
   await exec(
     'npx nx migrate --run-migrations=migrations.json --create-commits',
     [],
@@ -21,7 +21,7 @@ export async function migrate(keepMigrationsFile: boolean): Promise<void> {
     }
   )
   // sometimes migrations change packages without installing them, so naivly install dependencies here again
-  await exec('npm i')
+  await exec('npm install --package-lock-only')
 
   if (!keepMigrationsFile) {
     fs.unlinkSync('./migrations.json')
