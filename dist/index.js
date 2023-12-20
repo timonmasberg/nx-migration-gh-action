@@ -41797,12 +41797,12 @@ function migrate(keepMigrationsFile) {
         yield (0, exec_1.exec)('npx nx migrate latest', [], {
             env: Object.assign(Object.assign({}, process.env), { npm_config_yes: String(true) })
         });
-        yield (0, exec_1.exec)('npm i');
+        yield (0, exec_1.exec)('npm install');
         yield (0, exec_1.exec)('npx nx migrate --run-migrations=migrations.json --create-commits', [], {
             env: Object.assign(Object.assign({}, process.env), { npm_config_yes: String(true), NX_MIGRATE_SKIP_INSTALL: String(true) })
         });
         // sometimes migrations change packages without installing them, so naivly install dependencies here again
-        yield (0, exec_1.exec)('npm i');
+        yield (0, exec_1.exec)('npm install --package-lock-only');
         if (!keepMigrationsFile) {
             fs_1.default.unlinkSync('./migrations.json');
         }
