@@ -1,0 +1,95 @@
+{
+  "version": "6.0",
+  "nxVersion": "17.2.6",
+  "deps": {
+    "nx": "17.2.6"
+  },
+  "pathMappings": {},
+  "nxJsonPlugins": [],
+  "pluginsConfig": {
+    "@nx/js": {
+      "analyzeSourceFiles": false
+    }
+  },
+  "fileMap": {
+    "projectFileMap": {},
+    "nonProjectFiles": [
+      {
+        "file": ".eslintignore",
+        "hash": "17227518856139820110"
+      },
+      {
+        "file": ".eslintrc.json",
+        "hash": "12605245624413958770"
+      },
+      {
+        "file": ".github/dependabot.yml",
+        "hash": "7101418331943651730"
+      },
+      {
+        "file": ".github/workflows/check-dist.yml",
+        "hash": "17724473485512341532"
+      },
+      {
+        "file": ".github/workflows/codeql-analysis.yml",
+        "hash": "10587421088402314321"
+      },
+      {
+        "file": ".github/workflows/test.yml",
+        "hash": "11906997994392691797"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "18227593736310238890"
+      },
+      {
+        "file": ".prettierignore",
+        "hash": "3734987794744130553"
+      },
+      {
+        "file": ".prettierrc.json",
+        "hash": "16438992691708727548"
+      },
+      {
+        "file": "action.yml",
+        "hash": "2074777355187425669"
+      },
+      {
+        "file": "dist/index.js",
+        "hash": "11007558149417181380"
+      },
+      {
+        "file": "dist/index.js.map",
+        "hash": "9298566953374602650"
+      },
+      {
+        "file": "dist/licenses.txt",
+        "hash": "4263706288021901620"
+      },
+      {
+        "file": "dist/sourcemap-register.js",
+        "hash": "1680675905047436818"
+      },
+      {
+        "file": "migrations.json",
+        "hash": "12965008637162335456"
+      },
+      {
+        "file": "nx.json",
+        "hash": "6257561449836764398"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "9046784483167686998"
+      },
+      {
+        "file": "package.json",
+        "hash": "15995238728996976357"
+      },
+      {
+        "file": "packages/.gitkeep",
+        "hash": "3244421341483603138"
+      }
+    ]
+  }
+}
