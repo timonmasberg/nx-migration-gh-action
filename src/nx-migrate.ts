@@ -1,22 +1,14 @@
 import {exec} from '@actions/exec'
 import fs from 'fs'
 
-export async function migrate(
-  keepMigrationsFile: boolean,
-  legacyPeerDeps: boolean
-): Promise<void> {
+export async function migrate(keepMigrationsFile: boolean): Promise<void> {
   await exec('npx nx migrate latest', [], {
     env: {
       ...process.env,
       npm_config_yes: String(true)
     }
   })
-  await exec('npm i', [], {
-    env: {
-      ...process.env,
-      npm_config_legacy_peer_deps: String(legacyPeerDeps)
-    }
-  })
+  await exec('npm i')
   await exec(
     'npx nx migrate --run-migrations=migrations.json --create-commits',
     [],
@@ -29,12 +21,7 @@ export async function migrate(
     }
   )
   // sometimes migrations change packages without installing them, so naivly install dependencies here again
-  await exec('npm i', [], {
-    env: {
-      ...process.env,
-      npm_config_legacy_peer_deps: String(legacyPeerDeps)
-    }
-  })
+  await exec('npm i')
 
   if (!keepMigrationsFile) {
     fs.unlinkSync('./migrations.json')

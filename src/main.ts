@@ -60,7 +60,7 @@ async function run(): Promise<void> {
     await exec('npm ci')
 
     core.debug('Starting migrations...')
-    await migrate(inputs.includeMigrationsFile, inputs.legacyPeerDeps)
+    await migrate(inputs.includeMigrationsFile)
 
     core.debug('Pushing changes...')
 

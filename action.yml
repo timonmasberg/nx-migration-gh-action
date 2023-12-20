@@ -18,10 +18,6 @@ inputs:
     required: false
     description: 'Title of the PR where $VERSION is the new version of NX.'
     default: 'Migrate NX to $VERSION'
-  legacyPeerDeps:
-    required: false
-    description: 'Value of the legacy-peer-deps flag for npm install.'
-    default: 'false'
 outputs:
   prId:
     description: 'Issue ID of the created PR'
