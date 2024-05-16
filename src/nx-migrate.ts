@@ -10,7 +10,7 @@ export async function migrate(keepMigrationsFile: boolean): Promise<void> {
   })
   await exec('npm install')
   await exec(
-    'npx nx migrate --run-migrations=migrations.json --create-commits',
+    'npx nx migrate --run-migrations=migrations.json  --if-exists --create-commits',
     [],
     {
       env: {
