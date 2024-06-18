@@ -18,6 +18,10 @@ inputs:
     required: false
     description: 'Title of the PR where $VERSION is the new version of NX.'
     default: 'Migrate NX to $VERSION'
+  installCommand:
+    required: false
+    description: 'Command to install dependencies.'
+    default: 'npm ci'
 outputs:
   prId:
     description: 'Issue ID of the created PR'
