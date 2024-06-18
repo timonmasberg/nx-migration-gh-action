@@ -57,7 +57,7 @@ async function run(): Promise<void> {
     await prepareGit(origin, branchName)
 
     core.debug('Installing deps...')
-    await exec('npm ci')
+    await exec(inputs.installCommand)
 
     core.debug('Starting migrations...')
     await migrate(inputs.includeMigrationsFile)

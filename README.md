@@ -32,6 +32,7 @@ jobs:
         prTitle: 'Migrates NX to $VERSION'
         includeMigrationsFile: false # `migrations.json` will not be included in this PR.
         base: 'dev'
+        installCommand: 'yarn' # optionally override the install command
 ```
 
 You can also use this action in other workflow events.
